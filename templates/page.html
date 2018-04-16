@@ -1,0 +1,39 @@
+{% block pre %}
+{% endblock pre %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <header class="site-header">
+        <div class="wrap">
+          <a class="site-title" href="/">neynt</a>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="wrap">
+          {{ page.content | safe }}
+          <!--
+<pre>
+{{ __tera_context | escape }}
+</pre>-->
+          <div>(Word count: {{ page.word_count }})</div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="wrap">
+          &nbsp;
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

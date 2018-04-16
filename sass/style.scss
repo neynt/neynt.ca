@@ -1,0 +1,113 @@
+/* Base */
+$link-color: #A978B9;
+$bg-color: #FDFCFA;
+$text-color: #4d3d4a;
+$fade-dur: 0.2s;
+ 
+@import url("/crimson/crimson.css");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+::-moz-selection {
+  color: #fff;
+  background-color: $link-color;
+}
+
+::selection {
+  color: #fff;
+  background-color: $link-color;
+}
+
+body {
+  font-family: "Crimson", serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 300;
+  background-color: $bg-color;
+  color: $text-color;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal;
+  margin-top: 1em;
+}
+
+h1 { font-size: 180%; }
+h2 { font-size: 150%; }
+h3 { font-size: 130%; }
+h4 { font-size: 100%; font-weight: bold; }
+
+a {
+  color: $link-color;
+  text-decoration: none;
+  text-decoration-skip: ink;
+  outline: 0;
+}
+a:hover {
+  color: $link-color;
+  text-decoration: underline;
+}
+a:visited { color: $link-color; }
+
+p {
+  margin: 0.6em 0 0.8em 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+ul, ol {
+  margin: 0 30px;
+}
+
+pre {
+  box-sizing: border-box;
+  padding: 10px 15px;
+}
+
+.container {
+  min-height: 100%;
+  position: relative;
+}
+
+.site-header {
+  border-top: 3px solid $link-color;
+  padding: 30px 0 0 0;
+}
+
+.site-title { font-size: 100%; font-weight: bold; }
+
+.page-content {
+  padding-bottom: 40px;
+}
+
+.site-footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border-bottom: 3px solid $link-color;
+}
+
+/* Utility */
+.wrap:before,
+.wrap:after { content:""; display:table; }
+.wrap:after { clear: both; }
+.wrap {
+  max-width: 600px;
+  padding: 0 20px;
+  margin: 0 auto;
+  zoom: 1;
+}
