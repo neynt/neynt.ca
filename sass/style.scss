@@ -1,7 +1,7 @@
 /* Base */
 $link-color: #A978B9;
 $bg-color: #FDFCFA;
-$text-color: #4d3d4a;
+$text-color: #000;
 $fade-dur: 0.2s;
  
 @import url("/crimson/crimson.css");
@@ -78,6 +78,19 @@ pre {
   padding: 10px 15px;
 }
 
+code, pre {
+  font-size: 92%;
+}
+
+iframe {
+  width: 100%;
+  border: 0;
+}
+
+.tsunami-widget {
+  resize: vertical;
+}
+
 .container {
   min-height: 100%;
   position: relative;
@@ -110,4 +123,28 @@ pre {
   padding: 0 20px;
   margin: 0 auto;
   zoom: 1;
+}
+
+.controls {
+  margin-left: 0px;
+}
+
+.control {
+  display: inline-block;
+  vertical-align: text-top;
+  margin: 0 5px;
+}
+
+.control label {
+  display: block;
+}
+
+.control input, .control select {
+  display: block;
+}
+
+input, select {
+  appearance: none;
+  background-color: transparent;
+  height: 25px;
 }
