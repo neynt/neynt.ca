@@ -24,43 +24,29 @@ MathJax.Hub.Config({
 
 ## Introduction
 
-
-Suppose that you want to design a new sound — say, a laser gun sound effect, or
-an alien-sounding musical instrument. One thing you might do this is to take a
-sound similar to the sound you have in mind, and to transform it, using
-well-established techniques such as filters and envelopes, until it is
-approximately the sound that you desire.
-
-But this approach is imperfect. By limiting yourself to modifying sounds that
-already exist, you become biased toward those sounds and artificially constrain
-the set of possible sounds you might end up with. Also, it seems that all but
-the most trivial techniques for transforming sound are inflexible and pricy.
-Take, for example, the market for VST plugins. The [Waves SSL
-E-Channel](https://www.waves.com/plugins/ssl-e-channel) plugin provides about
-20 knobs and dials that serve as parameters for an equalizer and a compressor —
-conceptually simple signal transformations — and its regular selling price is
-$249.
-
-I have recently tried create a new way to design new sounds: by representing
-signals in a programming language, and manipulating them directly in a
-programming environment that I call Tsunami. In this report, I will discuss
-some of the engineering decisions that I had to make while developing this
-programming environment; most notably, the representation of the signals
-themselves. I will also demonstrate the effectiveness of this technique by
-showing how some common signal processing algorithms might be implemented in
-this framework.
+For one of my personal projects, I tried create a new way to design sounds: by
+representing them in a programming language, and manipulating them directly in
+an in-browser programming environment called
+[Tsunami](https://tsunami.neynt.ca/). In this report, I will discuss some of
+the engineering decisions that I had to make while developing Tsunami; most
+notably, the representation of the signals themselves. I will also demonstrate
+the effectiveness of Tsunami by showing how some common signal processing
+algorithms might be implemented in this framework.
 
 ## Background
 
 ### Signals
 
-Every sound you will ever hear can be modelled as a signal: a function over
-time. This is the signal that microphones try to capture and speakers try to
-recreate; the signal that encodings like MP3, AAC, and Vorbis try to represent
-in a compressed format. Physically, this signal might represent the
-displacement of a microphone diaphragm, a speaker cone, or an eardrum. Our goal
-is to find a way to express these signals, as well as transformations on these
-signals, naturally in a programming environment.
+A signal is a function over time. This is the signal that microphones try to
+capture and speakers try to recreate; the signal that encodings like MP3, AAC,
+and Vorbis try to represent in a compressed format. Physically, this signal
+might represent the displacement of a microphone diaphragm, a speaker cone, or
+an eardrum. *Continuous-time* signals are like mathematical functions in that
+they are defined for every value of time and can be infinitely detailed, while
+*discrete-time* signals are series of values measured at a particular sampling
+rate. While signals are continuous in reality (ignoring quantum mechanics), one
+must usually convert them to discrete signals in order to manipulate them on a
+computer.
 
 ### Closures
 
@@ -68,19 +54,27 @@ Closures, or lexically scoped first-class functions, first appeared in Scheme
 in the 1970s and, as with all good language features, have been ignored in
 mainstream programming until a few years ago.[^scheme] *First-class* means that
 the function can be passed around, stored in a variable, and returned like any
-other value; *lexically scoped* means that the function can capture variables
-from the environment in which it was defined even if it is passed outside that
-environment. Both of these properties will come in handy for us.
+other value; *lexically scoped* means that the function can capture values from
+the environment in which it was defined even if it is passed outside that
+environment. These two properties together are very powerful; for example, they
+make it possible to define a function like `quadratic(a, b, c)` that itself
+returns a function `f(x)` that calculates the quadratic $( ax^2 + bx + c )$.
+
+The vast majority of languages that support closures are garbage collected.[^rust]
+This is understandable, since lexically scoped closures make it difficult to
+tell when memory can be freed. One can no longer simply pop off a stack frame
+when a function returns, since that stack frame might contain variables that
+are referenced by a closure that the function returns.
 
 ### TypeScript
 
-Most of the code examples in this article will be written in TypeScript,
+Most of the code examples in this article are written in TypeScript,
 Microsoft's layer of gradual typing on top of JavaScript. TypeScript's type
-definitions and annotations will allow us to precisely specify the data
-structures we are using. While JavaScript has its warts, it also has good
-parts: it supports closures, its syntax has been getting better with each new
-version, and many smart people have worked very hard to make it run really fast
-right in your browser.
+definitions and annotations allow us to precisely specify the data structures
+we are using. While JavaScript has its warts, it also has good parts: it
+supports closures, its syntax has been getting better with each new version,
+and many smart people have worked very hard to make it run really fast right in
+your browser.
 
 ![](javascript-the-good-parts.jpg)
 
@@ -88,17 +82,20 @@ right in your browser.
 
 ## Design goals
 
+Our goal is to find a way to express these signals, as well as transformations
+on these signals, naturally in a programming environment.
+
 An ideal means of representing signals, for the purposes of Tsuanami, should
 satisfy the following properties.
 
 - It should be flexible. One should be able to apply a wide variety of signal
   processing techniques using a single interface.
-- It should be conceptually simple. There should be a clear mapping between the
-  objects you are manipulating and the resulting sound.
 - It should be performant. It should be possible to play sounds in real time
   without waiting for them to render.
 - It should be easy to manipulate in a language that runs in your web browser.
-  This goal is more for vanity than
+  This goal is more vain than technical; applications that run directly in the
+  browser have a low barrier to entry, so making Sinusoid a web app increases
+  the chance that it becomes popular some day.
 
 MP3 is an example of something that doesn't satisfy these properties. It is
 opaque, and must be decoded to get access to any meaningful information in the
@@ -109,8 +106,8 @@ MP3 file other than decoding it.
 
 ### Continuous signals
 
-How might you represent a signal using a first-class function? One way that
-immediately comes to mind is by representing it as a function over time:
+As you may have figured out, one way to represent a signal is to directly use a
+first-class function.
 
 ```typescript
 type Signal = (t: number) => number;
@@ -122,7 +119,8 @@ This is a very elegant way to treat signals. But this representation doesn't
 capture all the information that we might want. Most notably, it's impossible
 to tell how long a signal lasts — we must treat all signals as if they have
 infinite duration! This is inefficient, so let's put the function and its
-duration together in an `interface`.
+duration together in an `interface` (TypeScript's name for "the shape of an
+object").
 
 ```typescript
 interface Signal {
@@ -133,27 +131,36 @@ interface Signal {
 
 This, I claim, is enough to do an impressive amount. A signal can be created
 simply by describing it as a calculation of time, and annotating it with its
-actual duration.
+actual duration. For example, here is a pure tone at A440:
+
+```typescript
+const sine_440: Signal = {
+  f: t => Math.sin(2 * Math.PI * 440 * t),
+  dur: Infinity,
+}
+```
 
 ### Discrete signals
 
 However, it isn't enough to be able to work with continuous signals. While they
 are a useful and flexible way to think about signals, we are ultimately working
 on a computer, which has to eventually output digital samples to an output
-device (which will only later be converted back into continuous mechanical
-movements and sound waves that we hear). Also, many efficient digital signal
-processing algorithms exploit the structure present in signals that are sampled
-at a constant rate over time. Therefore, we need a way to represent these
-discrete signals. One natural way is with a flat array of samples:
+device — these digital samples are only later converted to the analog signal
+that is played back. Also, many efficient digital signal processing algorithms
+are efficient only on discrete signals, which are sampled at a constant rate
+over time. Therefore, we need a way to represent these discrete signals. One
+natural way is with a flat array of samples:
 
 ```typescript
 type DiscreteSignal = Float32Array
 ```
 
 Since arrays already carry their length, we don't need to store the size of the
-array separately. However, just this isn't enough information to play back the
-signal — we also need to know how much time each sample represents, the
-*sample rate*. So, we will similarly wrap this array in an object as follows:
+array separately, so we don't need to annotate this array with a duration like
+we did the continuous signal. However, the array itself doesn't have enough
+information to play back the signal — we also need to know how much time each
+sample represents, the *sample rate*. So, we will similarly wrap this array in
+an object as follows:
 
 ```typescript
 interface DiscreteSignal {
@@ -164,14 +171,74 @@ interface DiscreteSignal {
 
 This is now fully enough information to reproduce the signal.
 
+### Conversion
+
 At this point, we have two flexible and simple representations of signals. But
-they are fundamentally different, and aren't interchangeable. For example,
-suppose we wanted to mix together two signals to produce a third signal that is
-their "sum" — there is no natural way to add together a function over time, and
-an array with discrete indices. How do we bridge this gap? As we will see,
-there are natural ways to convert between continuous and discrete signals that
-preserve all the information that one might care about, so we can take these
-two representations of a signal to be mostly interchangeable.
+they aren't interchangeable. For example, suppose we wanted to mix together two
+signals to produce a third signal that is their "sum" — there is no natural way
+to add together a function and an array. How do we bridge this gap? As it turns
+out, there are very natural ways to convert between the two.
+
+If we have continuous signal, converting it to a discrete signal is only
+a matter of sampling it:
+
+```typescript
+function discretize(s: Signal, sample_rate: number) {
+  const n = Math.floor(s.dur * sample_rate);
+  const samples = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    samples[i] = s.f(i / sample_rate);
+  }
+  return { samples, sample_rate } as DiscreteSignal;
+}
+```
+
+One might worry that this discards information, and indeed it does, but as the
+Sampling Theorem states, only information above the Nyquist frequency of
+`sample_rate / 2` is lost. So if we pick a standard sample rate like 44100 Hz,
+all information in frequencies below 22050 Hz will be preserved, encompassing
+the entire human hearing range.
+
+What if we have a discrete signal and want to make it continuous? This is a bit
+trickier, and there are several approaches we can try here. The most "proper"
+way is to sample the Discrete-time Fourier Transform (DTFT). This interpolates
+the discrete samples "perfectly" in that if the original continuous signal had
+no information above the Nyquist frequency, then the DTFT lets us recover the
+original signal perfectly. However, it is computationally expensive. Since
+we'll be converting between discrete and continuous signals all the time, we
+can use the zero-order hold: simply holding the signal at the sampled level for
+each sampling period.
+
+```typescript
+function zero_order_hold(s: DiscreteSignal): Signal {
+  return {
+    f: t => s.samples[Math.round(t * s.sample_rate)] || 0,
+    dur: s.samples.length / s.sample_rate,
+  }
+}
+```
+
+We now have a representation for signals that mostly satisfies the three
+properties we previously mentioned. It is performant: it is possible to get the
+value of the signal at any time using only a function call, and we used
+techniques such as the `dur` field in `Signal` and the zero order hold to keep
+things efficient. And it is easy to manipulate in JavaScript, so it can run
+directly in your browser. The criterion that this solution doesn't fully
+satisfy is flexibility: rather than having a single interface that can be used
+to apply any signal processing technique, the user is forced to separate
+continuous and discrete signals.
+
+There are a couple ways to achieve the more uniform interface that we
+originally desired. One way is to model every discrete signal as a continuous
+signal by immediately converting discrete signals to continuous whenever they
+are created. Unfortunately, this makes it easy to accidentally do inefficient
+things, since algorithms that are efficient only on discrete signals can now
+take continuous signals as input. Another way is to use *typeclasses*, a
+language feature that allows us to treat both types of signals generically by
+specifying their common functionality. However, typeclasses haven't really
+become mainstream yet, and aren't available in most mainstream programming
+languages including TypeScript. In the end, I felt that sacrificing flexibility
+was the best trade off to make.
 
 ## Two domains
 
@@ -226,7 +293,7 @@ signals — it takes a discrete sampled signal as input, and produces one as
 output. Allowing `Signal`s to be converted freely to and from `DiscreteSignal`s
 gives us efficient access to the frequency domain.
 
-## The convolution theorem
+### Aside: The convolution theorem
 
 A key result from Fourier analysis is the **convolution theorem**:
 
@@ -236,8 +303,10 @@ $$
 $$
 
 where $(f)$ and $(g)$ are signals, $(\*)$ is convolution, and $(\mathcal{F})$
-is the Fourier transform. This can be summarized as "pointwise multiplication
-in one domain is convolution in the other domain".
+is the Fourier transform.
+
+This theorem is key to understanding many audio processing and synthesis
+techniques.
 
 The formula can be a bit opaque, so here is a visual explaining what exactly it
 means.
@@ -252,7 +321,7 @@ means.
 <svg id='signal3-time' style='width: 50%; height: 120px' />
 <svg id='signal3-freq' style='width: 50%; height: 120px' />
 
-#### After multiplying time
+#### After pointwise-multiplying in time
 
 <svg id='signal4-time' style='width: 50%; height: 120px' />
 <svg id='signal4-freq' style='width: 50%; height: 120px' />
@@ -261,11 +330,11 @@ means.
 <div>Original signal</div>
 <div class='control'>
 <label>Frequency</label>
-<input id='signal1-freq-input' type='range' min='20' max='600' style='width:200px' />
+<input id='signal2-freq-input' type='range' min='20' max='600' style='width:200px' />
 </div>
 <div class='control'>
 <label>Shape</label>
-<select id='signal1-shape-input'>
+<select id='signal2-shape-input'>
 <option value='sin'>Sine</option>
 <option value='square'>Square</option>
 <option value='saw'>Saw</option>
@@ -276,26 +345,24 @@ means.
 <div>Envelope</div>
 <div class='control'>
 <label>Frequency</label>
-<input id='signal1-freq-input' type='range' min='20' max='600' style='width:200px' />
+<input id='signal3-freq-input' type='range' min='10' max='200' style='width:200px' />
 </div>
 <div class='control'>
-<label>Shape</label>
-<select id='signal1-shape-input'>
-<option value='sin'>Sine</option>
-<option value='square'>Square</option>
-<option value='saw'>Saw</option>
-</select>
+<label>Amplitude</label>
+<input id='signal3-amp-input' type='range' min='0' max='10' style='width:200px' />
 </div>
 </div>
 
-The convolution theorem is key to understanding many audio processing and
-synthesis techniques.
+The most important thing to notice here is that pointwise multiplication in the
+time domain becomes convolution in the frequency domain. Note that this also
+works in the other way — if you pointwise multiply in the frequency domain (for
+example, to filter out unwanted frequencies), that implies you need to convolve
+in the time domain.
 
 ## Audio processing techniques
 
-Let's demonstrate the efficacy of closures by implementing several audio
-processing techniques — some of which may be being sold right now as $29
-VST plugins.
+In this section, we demonstrate the effectiveness of our design by implementing
+several audio processing techniques.
 
 ### Amplitude modulation
 
@@ -307,7 +374,7 @@ code. Amplitude modulation for two continuous signals can be implemented in our
 framework as follows:
 
 ```typescript
-function multiply(a: Signal, b: Signal): Signal {
+function mul(a: Signal, b: Signal): Signal {
   return {
     f: t => a.f(t) * b.f(t),
     dur: Math.min(a.dur, b.dur),
@@ -316,7 +383,8 @@ function multiply(a: Signal, b: Signal): Signal {
 ```
 
 Note that signals `a` and `b` are treated symmetrically, so we can actually
-consider either one of them to be the "original" signal or the "envelope".
+consider either one of them to be the "original" signal or the "envelope". That
+is, pointwise multiplication is commutative.
 
 #### Envelopes
 
@@ -330,7 +398,7 @@ the key is released.
 ```typescript
 // adsr: attack, decay, sustain, release
 // tl: time, level
-function adsr(at, dt, sl, st, rt): Signal {
+function adsr({ at, dt, sl, st, rt }): Signal {
   f: (t) => {
     /*    */ if (t < at) return t / at;
     t -= at; if (t < dt) return ((dt - t) + (t * sl)) / dt;
@@ -342,13 +410,13 @@ function adsr(at, dt, sl, st, rt): Signal {
 }
 ```
 
-It looks like this:
+For example, `adsr({ at: 0.1, dt: 0.3, sl: 0.2, st: 0.5, rt: 0.2 })` looks like this:
 
-TODO
+<svg id='adsr-time' style='width: 100%; height: 120px' />
 
 And, when applied to a signal (we'll use a sawtooth wave), sounds like this:
 
-<iframe src='http://localhost:8080/embed#UnVkaW1lbnRzLnNhdyg0NDAp' class='tsunami-widget'>
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBteV9hZHNyID0gYWRzcih7CiAgYXQ6IDAuMSwgZHQ6IDAuMywgc2w6IDAuMiwgc3Q6IDAuNSwgcnQ6IDAuMgp9KTsKbXVsKHNhdyg0NDApLCBteV9hZHNyKQ==' class='tsunami-widget'>
 </iframe>
 
 #### Tremolo
@@ -356,6 +424,9 @@ And, when applied to a signal (we'll use a sawtooth wave), sounds like this:
 If our envelope is instead a low-frequency oscillator with a DC offset near 1,
 then we get a musical effect called tremolo. It's a subtle way to add richness
 to a sound.
+
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCB0cmVtb2xvID0gc3VtKFsKICBkYygxKSwKICBnYWluKDAuNSwgc2luZSg4KSksCl0pOwptdWwoZ2FpbigwLjUsIHNhdyg0NDApKSwgdHJlbW9sbyk=' class='tsunami-widget' style='min-height: 200px'>
+</iframe>
 
 #### AM synthesis
 
@@ -366,10 +437,13 @@ frequencies in the envelope merely change the loudness of a sound over time,
 high frequencies in the envelope can actually change the shape of the
 individual waves.
 
-Understanding the result of this procedure only requires
-understanding the convolution theorem — since applying an envelope is pointwise
-multiplication in the time domain, the signals are convolved in the frequency
-domain, which introduces plenty of new frequencies to the signal.
+Understanding the result of this procedure only requires understanding the
+convolution theorem — since applying an envelope is pointwise multiplication in
+the time domain, the signals are convolved in the frequency domain, which
+introduces plenty of new frequencies to the signal.
+
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwptdWwoc2F3KDQ3MCksIHNpbmUoNDAwKSk=' class='tsunami-widget'>
+</iframe>
 
 ### Phase modulation
 
@@ -396,23 +470,52 @@ function phase_mod(a: Signal, b: Signal): Signal {
 };
 ```
 
-This results in an exciting new technique: phase modulation.
+This results in an exciting new technique: phase modulation. Signal `a`
+modulates the phase of signal `b`, essentially allowing us to play `b` faster
+or slower over time, or even to play `b` back in time. In fact, if we calculate
+`a` as the integral of a desired instantaneous frequency modifier, then phase
+modulation can be used to implement frequency modulation.
 
 #### Vibrato
 
 If you modulate the phase of a signal using the sum of a unit ramp and a sine
-wave, then you get the same signal out but with a smoothly oscillating pitch.
+wave, then you get the same signal out but with a smoothly oscillating pitch, a
+musical effect known as vibrato.
 
-#### PM synthesis
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBtb2QgPSBzdW0oWwogIHJhbXBfKDEpLAogIGdhaW4oMC4wMDA3LCBzaW5lKDcpKSwKXSk7CnBoYXNlX21vZChtb2QsIHNpbmUoNDQwKSk=' class='tsunami-widget' style='min-height: 200px'>
+</iframe>
+
+#### FM synthesis
+
+Similarly to AM synthesis, we can modulate the phase of a signal using another
+audible signal to produce interesting effects. In particular, this can create a
+sound whose timbre varies over time, a common property of musical instruments.
+
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBlbnYgPQogIGFkc3Ioe2F0OiAwLjQsIGR0OiAwLjQsIHNsOiAwLjU1LCBzdDogMSwgcnQ6IDAuNH0pOwpjb25zdCBtb2QgPQogIHN1bShbbXVsKGdhaW4oMC4wMDEsIHNpbmUoNDQwKSksIGVudiksIHJhbXBfKDEuMCldKTsKcGhhc2VfbW9kKG1vZCwgbXVsKHNhdyg0NDApLCBlbnYpKQ==' class='tsunami-widget' style='min-height: 200px'>
+</iframe>
 
 ### Filters
 
-I hope that this has been an enlightening discussion on some of the design
-decisions I made while working on Tsunami. I hope, also, that this has been a
-convincing exploration into signal processing and the possibility for
-manipulating sound by direct programming. If you wish to explore further, I
-encourage you to try playing with sound on
-[Tsunami](https://tsunami.neynt.ca/).
+Finally, suppose we start with white noise. By discretizing the noise applying
+a convolutional filter, we can filter the frequencies present in the noise to
+our desired range.
+
+<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBvcmlnX25vaXNlID0gY3JvcCgxLCBub2lzZSk7CmxldCByZXN1bHQgPSBkaXNjcmV0aXplKDQ0MTAwLCBvcmlnX25vaXNlKTsKcmVzdWx0ID0gRmlsdGVycy5scGYoNTAwKShyZXN1bHQpOwpyZXN1bHQgPSB6ZXJvX29yZGVyX2hvbGQocmVzdWx0KTsKY29uY2F0KG9yaWdfbm9pc2UsIHJlc3VsdCk7' class='tsunami-widget' style='min-height: 200px'>
+</iframe>
+
+## Conclusion
+
+In this article, we discussed some of the design decisions that I made while
+working on Tsunami. We saw that while it would be ideal to have a single
+representation of signals, the existence of both continuous and discrete
+signals requires that we separate them for efficiency. We also demonstrated the
+viability of our final design by using it to implement several common signal
+processing techniques.
+
+I hope, also, that this has been a convincing dive into the possibility for
+manipulating sound by programming. If you wish to explore further, I encourage
+you to play with [Tsunami](https://tsunami.neynt.ca/) (though I have yet
+to write good documentation for it).
 
 ## Footnotes
 
@@ -420,6 +523,10 @@ encourage you to try playing with sound on
   released 2014. As usual, there is a 40-year gap between the invention of an
   incredibly useful language feature in academia and its appearance in the
   mainstream.
+
+[^rust]: While it was once believed that garbage collection is necessary to
+  have closures, the programming language Rust implements closures without a
+  garbage collector by keeping track of references using its ownership system.
 
 [^typed_arrays]: Although there are now typed arrays that can store integers
   and floats.

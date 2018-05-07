@@ -131,8 +131,10 @@ function plot_signal(
   elt: HTMLElement,
   data: [number, number][],
   stroke: string,
+  y_min: number,
+  y_max: number,
 ): void {
-  const margin = { top: 10, right: 10, bottom: 20, left: 20 };
+  const margin = { top: 10, right: 10, bottom: 20, left: 40 };
   const width  = elt.clientWidth - margin.left - margin.right;
   const height = elt.clientHeight - margin.top - margin.bottom;
   const svg = d3.select(elt);
@@ -151,7 +153,7 @@ function plot_signal(
   g.attr('transform', `translate(${margin.left}, ${margin.top})`);
 
   x.domain(d3.extent(data, d => d[0]));
-  y.domain(d3.extent(data, d => d[1]));
+  y.domain([y_min, y_max]);
 
   g.append('g')
   .attr('transform', `translate(0,${height})`)
@@ -159,8 +161,8 @@ function plot_signal(
   //.select('.domain')
   //.remove();
   
-  //g.append('g')
-  //.call(d3.axisLeft(y).ticks(0))
+  g.append('g')
+  .call(d3.axisLeft(y).ticks(2))
   //.append('text')
   //.attr('fill', '#000')
   //.attr('transform', 'rotate(-90)')
@@ -191,45 +193,132 @@ function mk_saw(freq) {
   return t => ((t * freq) % 1) * 2 - 1;
 }
 
+function mk_vibrato(freq, amp) {
+  return t => 1 + amp * Math.sin(2 * Math.PI * t * freq);
+}
+
+function mk_fun(name) {
+  switch (name) {
+    case 'sin': return mk_sine;
+    case 'saw': return mk_saw;
+    case 'square': return mk_square;
+  }
+}
+
+function simple_fft(data: [number, number][]): [number, number][] {
+  const real: Buffer = new Float32Array(data.map(d => d[1]));
+  const imag: Buffer = zeros(real.length);
+  forward(real, imag);
+  const freq_data = [];
+  for (let i = 0; i < real.length / 2; i += 1) {
+    freq_data.push([i, Math.sqrt(real[i]*real[i] + imag[i]*imag[i])]);
+  }
+  return freq_data;
+}
+
+// adsr: attack, decay, sustain, release
+// tl: time, level
+function adsr({ at, dt, sl, st, rt }): (number) => number {
+  return (t) => {
+    /*    */ if (t < at) return t / at;
+    t -= at; if (t < dt) return ((dt - t) + (t * sl)) / dt;
+    t -= dt; if (t < st) return sl;
+    t -= st; if (t < rt) return sl * (1 - (t / rt));
+    return 0;
+  }
+}
+
 window.addEventListener('load', (event) => {
   const signal1_time = document.getElementById('signal1-time');
   const signal1_freq = document.getElementById('signal1-freq');
-  const signal1_freq_input =
-    document.getElementById('signal1-freq-input') as HTMLInputElement;
-  const signal1_shape_input =
-    document.getElementById('signal1-shape-input') as HTMLInputElement;
+  const signal1_freq_input = document.getElementById('signal1-freq-input') as HTMLInputElement;
+  const signal1_shape_input = document.getElementById('signal1-shape-input') as HTMLInputElement;
 
   function draw_signal_1() {
     const data: [number, number][] = [];
     const num_samples = 2048;
 
     const freq = parseFloat(signal1_freq_input.value);
-    var f;
-    switch (signal1_shape_input.value) {
-      case 'sin': f = mk_sine(freq); break;
-      case 'saw': f = mk_saw(freq); break;
-      case 'square': f = mk_square(freq); break;
-    }
+    const f = mk_fun(signal1_shape_input.value)(freq);
 
     for (let x = 0; x < num_samples; x += 1) {
       const t = 0.1 * x / num_samples;
       data.push([t, f(t)]);
     }
 
-    const real: Buffer = new Float32Array(data.map(d => d[1]));
-    const imag: Buffer = zeros(num_samples);
-    forward(real, imag);
+    const freq_data = simple_fft(data);
 
-    const freq_data = [];
-    for (let i = 0; i < num_samples / 2; i += 1) {
-      freq_data.push([i, Math.sqrt(real[i]*real[i] + imag[i]*imag[i])]);
-    }
-
-    plot_signal(signal1_time, data, '#4682B4');
-    plot_signal(signal1_freq, freq_data, '#B446A4');
+    plot_signal(signal1_time, data, '#4682B4', -1, 1);
+    plot_signal(signal1_freq, freq_data, '#B446A4', 0, 1000);
   }
+
+  const signal2_time = document.getElementById('signal2-time');
+  const signal2_freq = document.getElementById('signal2-freq');
+  const signal3_time = document.getElementById('signal3-time');
+  const signal3_freq = document.getElementById('signal3-freq');
+  const signal4_time = document.getElementById('signal4-time');
+  const signal4_freq = document.getElementById('signal4-freq');
+  const signal2_freq_input = document.getElementById('signal2-freq-input') as HTMLInputElement;
+  const signal2_shape_input = document.getElementById('signal2-shape-input') as HTMLInputElement;
+  const signal3_freq_input = document.getElementById('signal3-freq-input') as HTMLInputElement;
+  const signal3_amp_input = document.getElementById('signal3-amp-input') as HTMLInputElement;
+
+  function draw_conv_thm() {
+    const num_samples = 2048;
+    const orig_data: [number, number][] = [];
+    const freq = parseFloat(signal2_freq_input.value);
+    const f = mk_fun(signal2_shape_input.value)(freq);
+    const t = n => 0.1 * n / num_samples;
+    for (let x = 0; x < num_samples; x += 1) {
+      const t_ = t(x);
+      orig_data.push([t_, f(t_)]);
+    }
+    const orig_data_freq = simple_fft(orig_data);
+
+    const env_data: [number, number][] = [];
+    const env_f = mk_vibrato(parseFloat(signal3_freq_input.value), parseFloat(signal3_amp_input.value) / 20);
+    for (let x = 0; x < num_samples; x += 1) {
+      const t_ = t(x);
+      env_data.push([t_, env_f(t_)]);
+    }
+    const env_data_freq = simple_fft(env_data);
+
+    const after_data: [number, number][] = [];
+    for (let x = 0; x < num_samples; x += 1) {
+      const t_ = t(x);
+      after_data.push([t_, orig_data[x][1] * env_data[x][1]]);
+    }
+    const after_data_freq = simple_fft(after_data);
+
+    plot_signal(signal2_time, orig_data, '#4682B4', -2, 2);
+    plot_signal(signal2_freq, orig_data_freq, '#4682B4', 0, 1000);
+    plot_signal(signal3_time, env_data, '#4682B4', -2, 2);
+    plot_signal(signal3_freq, env_data_freq, '#4682B4', 0, 1000);
+    plot_signal(signal4_time, after_data, '#4682B4', -2, 2);
+    plot_signal(signal4_freq, after_data_freq, '#4682B4', 0, 1000);
+  }
+
+  const adsr_time = document.getElementById('adsr-time');
+  function draw_adsr() {
+    const num_samples = 2048;
+    const f = adsr({ at: 0.1, dt: 0.3, sl: 0.2, st: 0.5, rt: 0.2 });
+    const total_time = 1.1;
+    const data: [number, number][] = [];
+    for (let x = 0; x < num_samples; x += 1) {
+      const t = total_time * x / num_samples;
+      data.push([t, f(t)]);
+    }
+    plot_signal(adsr_time, data, '#4682B4', 0, 1);
+  }
+
   draw_signal_1();
+  draw_conv_thm();
+  draw_adsr();
 
   signal1_freq_input.addEventListener('input', (evt) => { draw_signal_1(); });
   signal1_shape_input.addEventListener('change', (evt) => { draw_signal_1(); });
+  signal2_freq_input.addEventListener('input', (evt) => { draw_conv_thm(); });
+  signal2_shape_input.addEventListener('change', (evt) => { draw_conv_thm(); });
+  signal3_freq_input.addEventListener('input', (evt) => { draw_conv_thm(); });
+  signal3_amp_input.addEventListener('input', (evt) => { draw_conv_thm(); });
 });
