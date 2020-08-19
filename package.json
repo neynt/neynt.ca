@@ -2,6 +2,6 @@
   "name": "neynt.ca",
   "version": "0.0.1",
   "dependencies": {
-    "@types/d3": "5.0.0"
+    "@types/d3": "5.7.1"
   }
 }

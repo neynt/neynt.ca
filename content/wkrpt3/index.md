@@ -16,12 +16,6 @@ MathJax.Hub.Config({
 
 # Making waves
 
-- Jim Zhang
-- Relevant courses: MATH 213, SE 380, ECE 413
-- Opt-in: Yes
-
----
-
 ## Introduction
 
 For one of my personal projects, I tried create a new way to design sounds: by
@@ -94,7 +88,7 @@ satisfy the following properties.
   without waiting for them to render.
 - It should be easy to manipulate in a language that runs in your web browser.
   This goal is more vain than technical; applications that run directly in the
-  browser have a low barrier to entry, so making Sinusoid a web app increases
+  browser have a low barrier to entry, so making Tsunami a web app increases
   the chance that it becomes popular some day.
 
 MP3 is an example of something that doesn't satisfy these properties. It is
@@ -416,7 +410,7 @@ For example, `adsr({ at: 0.1, dt: 0.3, sl: 0.2, st: 0.5, rt: 0.2 })` looks like 
 
 And, when applied to a signal (we'll use a sawtooth wave), sounds like this:
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBteV9hZHNyID0gYWRzcih7CiAgYXQ6IDAuMSwgZHQ6IDAuMywgc2w6IDAuMiwgc3Q6IDAuNSwgcnQ6IDAuMgp9KTsKbXVsKHNhdyg0NDApLCBteV9hZHNyKQ==' class='tsunami-widget'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBteV9hZHNyID0gYWRzcih7CiAgYXQ6IDAuMSwgZHQ6IDAuMywgc2w6IDAuMiwgc3Q6IDAuNSwgcnQ6IDAuMgp9KTsKbXVsKHNhdyg0NDApLCBteV9hZHNyKQ==' class='tsunami-widget'>
 </iframe>
 
 #### Tremolo
@@ -425,7 +419,7 @@ If our envelope is instead a low-frequency oscillator with a DC offset near 1,
 then we get a musical effect called tremolo. It's a subtle way to add richness
 to a sound.
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCB0cmVtb2xvID0gc3VtKFsKICBkYygxKSwKICBnYWluKDAuNSwgc2luZSg4KSksCl0pOwptdWwoZ2FpbigwLjUsIHNhdyg0NDApKSwgdHJlbW9sbyk=' class='tsunami-widget' style='min-height: 200px'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCB0cmVtb2xvID0gc3VtKFsKICBkYygxKSwKICBnYWluKDAuNSwgc2luZSg4KSksCl0pOwptdWwoZ2FpbigwLjUsIHNhdyg0NDApKSwgdHJlbW9sbyk=' class='tsunami-widget' style='min-height: 200px'>
 </iframe>
 
 #### AM synthesis
@@ -442,7 +436,7 @@ convolution theorem — since applying an envelope is pointwise multiplication i
 the time domain, the signals are convolved in the frequency domain, which
 introduces plenty of new frequencies to the signal.
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwptdWwoc2F3KDQ3MCksIHNpbmUoNDAwKSk=' class='tsunami-widget'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwptdWwoc2F3KDQ3MCksIHNpbmUoNDAwKSk=' class='tsunami-widget'>
 </iframe>
 
 ### Phase modulation
@@ -482,7 +476,7 @@ If you modulate the phase of a signal using the sum of a unit ramp and a sine
 wave, then you get the same signal out but with a smoothly oscillating pitch, a
 musical effect known as vibrato.
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBtb2QgPSBzdW0oWwogIHJhbXBfKDEpLAogIGdhaW4oMC4wMDA3LCBzaW5lKDcpKSwKXSk7CnBoYXNlX21vZChtb2QsIHNpbmUoNDQwKSk=' class='tsunami-widget' style='min-height: 200px'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBtb2QgPSBzdW0oWwogIHJhbXBfKDEpLAogIGdhaW4oMC4wMDA3LCBzaW5lKDcpKSwKXSk7CnBoYXNlX21vZChtb2QsIHNpbmUoNDQwKSk=' class='tsunami-widget' style='min-height: 200px'>
 </iframe>
 
 #### FM synthesis
@@ -491,7 +485,7 @@ Similarly to AM synthesis, we can modulate the phase of a signal using another
 audible signal to produce interesting effects. In particular, this can create a
 sound whose timbre varies over time, a common property of musical instruments.
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBlbnYgPQogIGFkc3Ioe2F0OiAwLjQsIGR0OiAwLjQsIHNsOiAwLjU1LCBzdDogMSwgcnQ6IDAuNH0pOwpjb25zdCBtb2QgPQogIHN1bShbbXVsKGdhaW4oMC4wMDEsIHNpbmUoNDQwKSksIGVudiksIHJhbXBfKDEuMCldKTsKcGhhc2VfbW9kKG1vZCwgbXVsKHNhdyg0NDApLCBlbnYpKQ==' class='tsunami-widget' style='min-height: 200px'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBlbnYgPQogIGFkc3Ioe2F0OiAwLjQsIGR0OiAwLjQsIHNsOiAwLjU1LCBzdDogMSwgcnQ6IDAuNH0pOwpjb25zdCBtb2QgPQogIHN1bShbbXVsKGdhaW4oMC4wMDEsIHNpbmUoNDQwKSksIGVudiksIHJhbXBfKDEuMCldKTsKcGhhc2VfbW9kKG1vZCwgbXVsKHNhdyg0NDApLCBlbnYpKQ==' class='tsunami-widget' style='min-height: 200px'>
 </iframe>
 
 ### Filters
@@ -500,7 +494,7 @@ Finally, suppose we start with white noise. By discretizing the noise applying
 a convolutional filter, we can filter the frequencies present in the noise to
 our desired range.
 
-<iframe src='http://localhost:8080/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBvcmlnX25vaXNlID0gY3JvcCgxLCBub2lzZSk7CmxldCByZXN1bHQgPSBkaXNjcmV0aXplKDQ0MTAwLCBvcmlnX25vaXNlKTsKcmVzdWx0ID0gRmlsdGVycy5scGYoNTAwKShyZXN1bHQpOwpyZXN1bHQgPSB6ZXJvX29yZGVyX2hvbGQocmVzdWx0KTsKY29uY2F0KG9yaWdfbm9pc2UsIHJlc3VsdCk7' class='tsunami-widget' style='min-height: 200px'>
+<iframe src='https://tsunami.neynt.ca/embed#Rm4ub3BlbihSdWRpbWVudHMpOwpjb25zdCBvcmlnX25vaXNlID0gY3JvcCgxLCBub2lzZSk7CmxldCByZXN1bHQgPSBkaXNjcmV0aXplKDQ0MTAwLCBvcmlnX25vaXNlKTsKcmVzdWx0ID0gRmlsdGVycy5scGYoMTc2MCkocmVzdWx0KTsKcmVzdWx0ID0gemVyb19vcmRlcl9ob2xkKHJlc3VsdCk7CmNvbmNhdChvcmlnX25vaXNlLCByZXN1bHQpOw==' class='tsunami-widget' style='min-height: 200px'>
 </iframe>
 
 ## Conclusion

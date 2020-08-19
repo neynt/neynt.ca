@@ -1,16 +1,15 @@
 +++
 title = "neynt"
-description = "Hello"
+description = "neynt"
 +++
 
-<p style='display:none' id='syzygy'>
-Hi. My name is Jim Zhang. I usually go by "neynt" online.<br>
-I'm on <a href='https://github.com/neynt/'>GitHub</a>, <a href='https://keybase.io/neynt'>Keybase</a>, and <a href='http://data.typeracer.com/pit/profile?user=neynt'>TypeRacer</a>.
-</p>
+#### 2019
+
+- [Adrestia](https://adrestia.neynt.ca/) is a strategy game.
 
 #### 2018
 
-- [Tsunami](https://tsunami.neynt.ca/) is a better music programming environment.
+- [Tsunami](https://tsunami.neynt.ca/) is another music programming environment.
 
 #### 2017
 
@@ -33,9 +32,3 @@ I'm on <a href='https://github.com/neynt/'>GitHub</a>, <a href='https://keybase.
 #### 2012
 
 - [Well Done](https://github.com/neynt/well-done) is a roguelike.
-
-<script>
-if (document.referrer.indexOf('jimzhang') !== -1) {
-  document.getElementById('syzygy').style.display = 'block';
-}
-</script>
