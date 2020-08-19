@@ -23,7 +23,6 @@ description = "neynt"
 
 - [Smush](https://smush.neynt.ca/) is a text-based multiplayer worldbuilding game.
 - [Fortuit](https://fortuit.semicolon.ca/) is a prediction tracker, made with [czinn](http://charleszinn.ca/).
-- [Tsundict](https://tsundict.neynt.ca/) is a Japanese dictionary site.
 
 #### 2013
 

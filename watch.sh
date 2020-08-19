@@ -3,7 +3,7 @@ install_npm_packages() {
   npm i -g html-minifier
 }
 build() {
-  gutenberg build
+  zola build
   rm serve/*
   for f in $(find public -iname '*.html'); do
     html-minifier $f -o $f \
