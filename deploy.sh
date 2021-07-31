@@ -1,2 +1,2 @@
 #!/bin/bash
-rsync -r public/* neynt@tohsaka:~/neynt.ca/
+rsync -r public/* neynt@hanabi:~/neynt.ca/

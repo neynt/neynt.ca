@@ -5,29 +5,29 @@ description = "neynt"
 
 #### 2019
 
-- [Adrestia](https://adrestia.neynt.ca/) is a strategy game.
+- [**Adrestia**](https://adrestia.neynt.ca/) is a strategy game.
 
 #### 2018
 
-- [Tsunami](https://tsunami.neynt.ca/) is another music programming environment.
+- **Tsunami** was another music programming environment.
 
 #### 2017
 
-- [Tableflip](https://tableflip.semicolon.ca/) is a board game website.
+- **Tableflip** was a board game website.
 
 #### 2016
 
-- [Sinusoid](https://sinusoid.neynt.ca/) is a music programming environment.
+- **Sinusoid** was a music programming environment.
 
 #### 2015
 
-- [Smush](https://smush.neynt.ca/) is a text-based multiplayer worldbuilding game.
-- [Fortuit](https://fortuit.semicolon.ca/) is a prediction tracker, made with [czinn](http://charleszinn.ca/).
+- **Smush** was a text-based multiplayer worldbuilding game.
+- **Fortuit** was a prediction tracker, made with [czinn](http://charleszinn.ca/).
 
 #### 2013
 
-- [Tsundiary](https://www.tsundiary.com/) is a diary site.
+- [**Tsundiary**](https://www.tsundiary.com/) is a diary site.
 
 #### 2012
 
-- [Well Done](https://github.com/neynt/well-done) is a roguelike.
+- [**Well Done**](https://github.com/neynt/well-done) is a roguelike.

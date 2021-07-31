@@ -14,6 +14,7 @@ description = "neynt's taste in music"
 - Hans Zimmer
 - John Powell
 - Philip Glass
+- Two Steps From Hell
 - Yuki Kajiura
 
 #### Weeb trash
@@ -23,6 +24,7 @@ description = "neynt's taste in music"
 - Ken Ashcorp
 - Kikuo
 - Neru
+- Yunosuke
 - mothy\_Akuno-P
 - wowaka
 
