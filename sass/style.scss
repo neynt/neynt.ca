@@ -1,7 +1,8 @@
 /* Base */
-$link-color: #A978B9;
+$link-color: #C67EE0;
 $bg-color: #FDFCFA;
 $text-color: #000;
+$faded-color: #aaa;
 $fade-dur: 0.2s;
  
 @import url("/crimson/crimson.css");
@@ -34,6 +35,8 @@ body {
   font-size: 16px;
   line-height: 1.6;
   font-weight: 300;
+  background: url(/rose.png) no-repeat top right;
+  background-size: 50px;
   background-color: $bg-color;
   color: $text-color;
 }
@@ -152,4 +155,11 @@ input, select {
 .footnote-definition-label {
   float: left;
   margin-right: 5px;
+}
+
+hr {
+  margin: 30px;
+  border: 0;
+  height: 1px;
+  background: $faded-color;
 }

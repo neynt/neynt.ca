@@ -3,9 +3,24 @@ title = "neynt"
 description = "neynt"
 +++
 
+#### 2021
+
+- [**Namanamashii**](https://namanamashii.neynt.ca/) is a text-based
+  multiplayer worldbuilding game.
+
 #### 2019
 
 - [**Adrestia**](https://adrestia.neynt.ca/) is a strategy game.
+
+#### 2013
+
+- [**Tsundiary**](https://www.tsundiary.com/) is a diary site.
+
+#### 2012
+
+- [**Well Done**](https://github.com/neynt/well-done) is a roguelike.
+
+---
 
 #### 2018
 
@@ -22,12 +37,4 @@ description = "neynt"
 #### 2015
 
 - **Smush** was a text-based multiplayer worldbuilding game.
-- **Fortuit** was a prediction tracker, made with [czinn](http://charleszinn.ca/).
-
-#### 2013
-
-- [**Tsundiary**](https://www.tsundiary.com/) is a diary site.
-
-#### 2012
-
-- [**Well Done**](https://github.com/neynt/well-done) is a roguelike.
+- **Fortuit** was a prediction tracker, made with [Charles Zinn](http://charleszinn.ca/).
