@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m http.server 8081 --directory public
+python -m http.server 9001 --directory public
