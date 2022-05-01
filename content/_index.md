@@ -3,14 +3,9 @@ title = "neynt"
 description = "neynt"
 +++
 
-#### 2021
-
-- [**Namanamashii**](https://namanamashii.neynt.ca/) is a text-based
-  multiplayer worldbuilding game.
-
 #### 2019
 
-- [**Adrestia**](https://adrestia.neynt.ca/) is a strategy game.
+- [**Adrestia**](http://adrestia.neynt.ca/) is a strategy game.
 
 #### 2013
 
@@ -21,6 +16,10 @@ description = "neynt"
 - [**Well Done**](https://github.com/neynt/well-done) is a roguelike.
 
 <hr class='grave'>
+
+#### 2021
+
+- **Namanamashii** was a text-based multiplayer worldbuilding game.
 
 #### 2018
 
