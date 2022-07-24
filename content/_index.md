@@ -3,6 +3,12 @@ title = "neynt"
 description = "neynt"
 +++
 
+I write code for fun and job and sometimes take [photos](photos/).
+
+#### 2022
+
+- [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracker.
+
 #### 2019
 
 - [**Adrestia**](http://adrestia.neynt.ca/) is a strategy game.

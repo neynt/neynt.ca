@@ -49,16 +49,17 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 { font-size: 180%; }
 h2 { font-size: 150%; }
-h3 { font-size: 130%; }
+h3 { font-size: 130%; font-weight: bold; }
 h4 { font-size: 100%; font-weight: bold; }
 
-a {
+a, .clickable {
+  cursor: pointer;
   color: $link-color;
   text-decoration: none;
   text-decoration-skip: ink;
   outline: 0;
 }
-a:hover {
+a:hover, .clickable:hover {
   color: $link-color;
   text-decoration: underline;
 }
