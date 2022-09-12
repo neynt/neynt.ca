@@ -9,9 +9,17 @@ I write code for fun and job and sometimes take [photos](photos/).
 
 - [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracker.
 
+#### 2021
+
+- [**Namanamashii**](https://namanamashii.neynt.ca/) is a text-based multiplayer worldbuilding game.
+
 #### 2019
 
 - [**Adrestia**](http://adrestia.neynt.ca/) is a strategy game.
+
+#### 2014
+
+- [**Cutting Down Trees**](https://x.neynt.ca/cutting-down-trees/) is an incremental game.
 
 #### 2013
 
@@ -22,10 +30,6 @@ I write code for fun and job and sometimes take [photos](photos/).
 - [**Well Done**](https://github.com/neynt/well-done) is a roguelike.
 
 <hr class='grave'>
-
-#### 2021
-
-- **Namanamashii** was a text-based multiplayer worldbuilding game.
 
 #### 2018
 

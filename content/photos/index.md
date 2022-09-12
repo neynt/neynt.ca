@@ -1,12 +1,10 @@
 +++
-title = "Photos"
+title = "neynt - photos"
 +++
 
 ### Photos
 
 Questions or feedback? Contact me on Discord (<span id='discord-username' class='clickable'>click for username</span>).
-
-If you're in a photo, I'm happy to provide attribution or high-res files.
 
 <script>
 const username_field = document.getElementById('discord-username');
@@ -25,7 +23,7 @@ username_field.onclick = () => {
 
 #### Continuous
 
-- [Cat photos](https://photos.neynt.ca/#/cats)
+- [Pet photos](https://photos.neynt.ca/#/pets)
 
 #### 2022
 

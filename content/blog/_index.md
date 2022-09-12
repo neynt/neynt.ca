@@ -1,6 +1,6 @@
 +++
-title = "neynt blog"
-description = "neynt blog"
+title = "neynt's blog"
+description = "neynt's blog"
 +++
 
 #### Blog
