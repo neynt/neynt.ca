@@ -5,6 +5,23 @@ description = "neynt"
 
 I write code for fun and job and sometimes take [photos](photos/).
 
+You can contact me on Discord: <span id='discord-username' class='clickable'>click for username</span>.
+
+<script>
+const username_field = document.getElementById('discord-username');
+username_field.onclick = () => {
+  const M = 333337;
+  const a = 135862;
+  for (let i = 0; i < 10000; i++) {
+    if (i * a % M === 1) {
+      username_field.innerHTML = `neynt#${i}`;
+      username_field.classList.remove('clickable');
+      username_field.onclick = undefined;
+    }
+  }
+};
+</script>
+
 #### 2022
 
 - [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracker.
