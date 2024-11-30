@@ -3,36 +3,18 @@ title = "neynt"
 description = "neynt"
 +++
 
-I write code for fun and job and sometimes take [photos](photos/).
-
-You can contact me on Discord: <span id='discord-username' class='clickable'>click for username</span>.
-
-<script>
-const username_field = document.getElementById('discord-username');
-username_field.onclick = () => {
-  const M = 333337;
-  const a = 135862;
-  for (let i = 0; i < 10000; i++) {
-    if (i * a % M === 1) {
-      username_field.innerHTML = `neynt#${i}`;
-      username_field.classList.remove('clickable');
-      username_field.onclick = undefined;
-    }
-  }
-};
-</script>
+I write code for fun and job in New York and
+sometimes take [photos](photos/).
 
 #### 2022
 
-- [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracker.
-
-#### 2021
-
-- [**Namanamashii**](https://namanamashii.neynt.ca/) is a text-based multiplayer worldbuilding game.
+- [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracking tool for
+  learning Japanese.
 
 #### 2019
 
-- [**Adrestia**](http://adrestia.neynt.ca/) is a strategy game.
+- [**Adrestia**](http://adrestia.neynt.ca/) is a mobile strategy game made in
+  Godot.
 
 #### 2014
 
@@ -40,17 +22,21 @@ username_field.onclick = () => {
 
 #### 2013
 
-- [**Tsundiary**](https://www.tsundiary.com/) is a diary site.
+- [**Tsundiary**](https://www.tsundiary.com/) is a social diary website.
 
 #### 2012
 
-- [**Well Done**](https://github.com/neynt/well-done) is a roguelike.
+- [**Well Done**](https://github.com/neynt/well-done) is a short roguelike.
 
 <hr class='grave'>
 
+#### 2021
+
+- **Namanamashii** was a text-based multiplayer worldbuilding game.
+
 #### 2018
 
-- **Tsunami** was another music programming environment.
+- **Tsunami** was a music programming environment.
 
 #### 2017
 
@@ -58,9 +44,9 @@ username_field.onclick = () => {
 
 #### 2016
 
-- **Sinusoid** was a music programming environment.
+- **Sinusoid** was another music programming environment.
 
 #### 2015
 
-- **Smush** was a text-based multiplayer worldbuilding game.
-- **Fortuit** was a prediction tracker, made with [Charles Zinn](http://charleszinn.ca/).
+- **Smush** was another text-based multiplayer worldbuilding game.
+- **Fortuit** was a prediction tracker.

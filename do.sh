@@ -36,7 +36,7 @@ function build() {
 }
 
 function watch() {
-  while inotifywait -e close_write \
+  while fswatch -1 \
     config.toml \
     content/** \
     templates/** \

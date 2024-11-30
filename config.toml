@@ -1,5 +1,7 @@
 # The URL the site will be built for
-base_url = "https://neynt.ca"
+base_url = "/"
+#base_url = "https://neynt.ca"
+#base_url = "http://localhost:9001"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true

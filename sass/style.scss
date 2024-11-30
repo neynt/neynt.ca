@@ -1,10 +1,10 @@
 /* Base */
-$link-color: #C67EE0;
-$bg-color: #FDFCFA;
+$link-color: #c91026;
+$bg-color: #fff8f3;
 $text-color: #000;
 $faded-color: #aaa;
 $fade-dur: 0.2s;
- 
+
 @import url("/crimson/crimson.css");
 
 * {
@@ -68,7 +68,7 @@ a:hover, .clickable:hover {
 a:visited { color: $link-color; }
 
 p {
-  margin: 0.5em 0 0.5em 0;
+  margin: 0.65em 0 0.65em 0;
 }
 
 img {
@@ -77,6 +77,10 @@ img {
 
 ul, ol {
   margin: 0 30px;
+}
+
+li {
+  margin: 7px 0;
 }
 
 pre {
