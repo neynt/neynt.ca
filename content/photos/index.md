@@ -1,7 +1,7 @@
 +++
-title = "neynt - photos"
+title = "photos"
+[extra]
+breadcrumbs = ["photos"]
 +++
-
-### Photos
 
 - [Selected photos](https://photos.neynt.ca/#/good)

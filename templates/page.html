@@ -7,6 +7,7 @@
     <title>{{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
+    <link rel="stylesheet" href="/iosevka-neynt/neynt.css">
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" type="image/png" href="/favicon.png">
   </head>
@@ -15,6 +16,16 @@
       <header class="site-header">
         <div class="wrap">
           <a class="site-title" href="/">neynt</a>
+          {% if page.extra.breadcrumbs %}
+            {% set_global crumbs = [] %}
+            {% for crumb in page.extra.breadcrumbs %}
+              {% set_global crumbs = crumbs | concat(with=crumb) %}
+              &raquo; <a href="/{{ crumbs | join(sep='/') }}/">{{ crumb }}</a>
+            {% endfor %}
+          {% endif %}
+          {% if page.extra.date %}
+            &ndash; <span class="date">{{ page.extra.date }}</span>
+          {% endif %}
         </div>
       </header>
 

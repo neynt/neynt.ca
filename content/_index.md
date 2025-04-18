@@ -1,52 +1,25 @@
 +++
 title = "neynt"
 description = "neynt"
+[extra]
+breadcrumbs = []
 +++
 
-I write code for fun and job in New York and
-sometimes take [photos](photos/).
+I write code for fun and job in nyc.<br>
+I've made some [things](things/).<br>
+Sometimes I [write](writing/).<br>
+Sometimes I listen to [music](music/).
 
-#### 2022
+## latest
 
-- [**Kanjiboard**](https://kanjiboard.neynt.ca/) is a kanji tracking tool for
-  learning Japanese.
+- 2024 Dec 24: [Whiplash](writing/whiplash/)
 
-#### 2019
+## frenz
 
-- [**Adrestia**](http://adrestia.neynt.ca/) is a mobile strategy game made in
-  Godot.
-
-#### 2014
-
-- [**Cutting Down Trees**](https://x.neynt.ca/cutting-down-trees/) is an incremental game.
-
-#### 2013
-
-- [**Tsundiary**](https://www.tsundiary.com/) is a social diary website.
-
-#### 2012
-
-- [**Well Done**](https://github.com/neynt/well-done) is a short roguelike.
-
-<hr class='grave'>
-
-#### 2021
-
-- **Namanamashii** was a text-based multiplayer worldbuilding game.
-
-#### 2018
-
-- **Tsunami** was a music programming environment.
-
-#### 2017
-
-- **Tableflip** was a board game website.
-
-#### 2016
-
-- **Sinusoid** was another music programming environment.
-
-#### 2015
-
-- **Smush** was another text-based multiplayer worldbuilding game.
-- **Fortuit** was a prediction tracker.
+[czinn](https://charleszinn.ca/),
+[ames](https://amyfare.ca/),
+[mk12](https://mitchellkember.com/),
+[jerry](https://www.jerry.wtf/),
+[aub](https://aubreyli.com/),
+[solicht](https://solicht88.github.io/personal-website/),
+[locria](https://www.1a-insec.net/)

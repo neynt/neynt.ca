@@ -5,7 +5,9 @@ $text-color: #000;
 $faded-color: #aaa;
 $fade-dur: 0.2s;
 
-@import url("/crimson/crimson.css");
+// @import url("/crimson/crimson.css");
+// @import url("/victor-mono/index.css");
+// @import url('https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@100..700&display=swap');
 
 * {
   margin: 0;
@@ -33,10 +35,10 @@ body {
 }
 
 body {
-  font-family: "Crimson", serif;
+  font-family: "Iosevka neynt Web", monospace;
   font-size: 16px;
   line-height: 1.6;
-  font-weight: 300;
+  font-weight: 400;
   //background: url(/rose.png) no-repeat top right;
   //background-size: 50px;
   background-color: $bg-color;
@@ -45,27 +47,44 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-size: 100%;
-  font-weight: normal;
   margin-top: 1em;
 }
 
-h1 { font-size: 180%; }
-h2 { font-size: 150%; }
-h3 { font-size: 130%; font-weight: bold; }
-h4 { font-size: 100%; font-weight: bold; }
+h1 {
+  font-weight: 700;
+}
+h2 {
+  font-weight: 700;
+}
+h3 {
+  font-weight: 700;
+}
+h4 {
+  font-weight: 300;
+}
+h5 {
+  font-weight: 200;
+}
+h6 {
+  font-weight: 100;
+}
 
 a, .clickable {
   cursor: pointer;
   color: $link-color;
-  text-decoration: none;
+  text-decoration: underline;
   text-decoration-skip: ink;
+  text-decoration-color: color-mix(in oklab, $link-color 30%, $bg-color 70%);
   outline: 0;
 }
-a:hover, .clickable:hover {
+a:visited {
   color: $link-color;
-  text-decoration: underline;
 }
-a:visited { color: $link-color; }
+a:hover, .clickable:hover {
+  // color: $link-color;
+  color: color-mix(in oklab, $link-color 70%, $bg-color 30%);
+  text-decoration-color: color-mix(in oklab, $link-color 50%, $bg-color 50%);
+}
 
 p {
   margin: 0.65em 0 0.65em 0;
@@ -81,6 +100,10 @@ ul, ol {
 
 li {
   margin: 7px 0;
+}
+
+strong {
+  font-weight: 700;
 }
 
 pre {
@@ -111,7 +134,7 @@ iframe {
   padding: 30px 0 0 0;
 }
 
-.site-title { font-size: 100%; font-weight: bold; }
+.site-title { font-size: 100%; font-weight: 700; }
 
 .page-content {
   padding-bottom: 40px;
@@ -151,6 +174,10 @@ iframe {
 
 .control input, .control select {
   display: block;
+}
+
+.date {
+  color: color-mix(in oklab, $text-color 40%, $bg-color 60%);
 }
 
 input, select {
